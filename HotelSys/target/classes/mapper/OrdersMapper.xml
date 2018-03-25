@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crud.dao.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.crud.bean.Orders">
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="orderId" jdbcType="VARCHAR" property="orderid" />
+    <result column="order_username" jdbcType="VARCHAR" property="orderUsername" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="order_createtime" jdbcType="TIMESTAMP" property="orderCreatetime" />
+    <result column="order_room" jdbcType="VARCHAR" property="orderRoom" />
+    <result column="checkintime" jdbcType="DATE" property="checkintime" />
+    <result column="checkouttime" jdbcType="DATE" property="checkouttime" />
+    <result column="nights" jdbcType="INTEGER" property="nights" />
+    <result column="add_request" jdbcType="VARCHAR" property="addRequest" />
+    <result column="originalprice" jdbcType="DOUBLE" property="originalprice" />
+    <result column="discount" jdbcType="DOUBLE" property="discount" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="end" jdbcType="INTEGER" property="end" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    Id, orderId, order_username, realname, email, tel, order_createtime, order_room, 
+    checkintime, checkouttime, nights, add_request, originalprice, discount, price, end
+  </sql>
+  <select id="selectByExample" parameterType="com.crud.bean.OrdersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from orders
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.crud.bean.OrdersExample">
+    delete from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.crud.bean.Orders">
+    insert into orders (Id, orderId, order_username, 
+      realname, email, tel, 
+      order_createtime, order_room, checkintime, 
+      checkouttime, nights, add_request, 
+      originalprice, discount, price, 
+      end)
+    values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, #{orderUsername,jdbcType=VARCHAR}, 
+      #{realname,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{orderCreatetime,jdbcType=TIMESTAMP}, #{orderRoom,jdbcType=VARCHAR}, #{checkintime,jdbcType=DATE}, 
+      #{checkouttime,jdbcType=DATE}, #{nights,jdbcType=INTEGER}, #{addRequest,jdbcType=VARCHAR}, 
+      #{originalprice,jdbcType=DOUBLE}, #{discount,jdbcType=DOUBLE}, #{price,jdbcType=DOUBLE}, 
+      #{end,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crud.bean.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        Id,
+      </if>
+      <if test="orderid != null">
+        orderId,
+      </if>
+      <if test="orderUsername != null">
+        order_username,
+      </if>
+      <if test="realname != null">
+        realname,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="orderCreatetime != null">
+        order_createtime,
+      </if>
+      <if test="orderRoom != null">
+        order_room,
+      </if>
+      <if test="checkintime != null">
+        checkintime,
+      </if>
+      <if test="checkouttime != null">
+        checkouttime,
+      </if>
+      <if test="nights != null">
+        nights,
+      </if>
+      <if test="addRequest != null">
+        add_request,
+      </if>
+      <if test="originalprice != null">
+        originalprice,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="end != null">
+        end,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderid != null">
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUsername != null">
+        #{orderUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="orderCreatetime != null">
+        #{orderCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderRoom != null">
+        #{orderRoom,jdbcType=VARCHAR},
+      </if>
+      <if test="checkintime != null">
+        #{checkintime,jdbcType=DATE},
+      </if>
+      <if test="checkouttime != null">
+        #{checkouttime,jdbcType=DATE},
+      </if>
+      <if test="nights != null">
+        #{nights,jdbcType=INTEGER},
+      </if>
+      <if test="addRequest != null">
+        #{addRequest,jdbcType=VARCHAR},
+      </if>
+      <if test="originalprice != null">
+        #{originalprice,jdbcType=DOUBLE},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="end != null">
+        #{end,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.crud.bean.OrdersExample" resultType="java.lang.Long">
+    select count(*) from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update orders
+    <set>
+      <if test="record.id != null">
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderid != null">
+        orderId = #{record.orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderUsername != null">
+        order_username = #{record.orderUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realname != null">
+        realname = #{record.realname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tel != null">
+        tel = #{record.tel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderCreatetime != null">
+        order_createtime = #{record.orderCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderRoom != null">
+        order_room = #{record.orderRoom,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkintime != null">
+        checkintime = #{record.checkintime,jdbcType=DATE},
+      </if>
+      <if test="record.checkouttime != null">
+        checkouttime = #{record.checkouttime,jdbcType=DATE},
+      </if>
+      <if test="record.nights != null">
+        nights = #{record.nights,jdbcType=INTEGER},
+      </if>
+      <if test="record.addRequest != null">
+        add_request = #{record.addRequest,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalprice != null">
+        originalprice = #{record.originalprice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.discount != null">
+        discount = #{record.discount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DOUBLE},
+      </if>
+      <if test="record.end != null">
+        end = #{record.end,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update orders
+    set Id = #{record.id,jdbcType=INTEGER},
+      orderId = #{record.orderid,jdbcType=VARCHAR},
+      order_username = #{record.orderUsername,jdbcType=VARCHAR},
+      realname = #{record.realname,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      tel = #{record.tel,jdbcType=VARCHAR},
+      order_createtime = #{record.orderCreatetime,jdbcType=TIMESTAMP},
+      order_room = #{record.orderRoom,jdbcType=VARCHAR},
+      checkintime = #{record.checkintime,jdbcType=DATE},
+      checkouttime = #{record.checkouttime,jdbcType=DATE},
+      nights = #{record.nights,jdbcType=INTEGER},
+      add_request = #{record.addRequest,jdbcType=VARCHAR},
+      originalprice = #{record.originalprice,jdbcType=DOUBLE},
+      discount = #{record.discount,jdbcType=DOUBLE},
+      price = #{record.price,jdbcType=DOUBLE},
+      end = #{record.end,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crud.bean.Orders">
+    update orders
+    <set>
+      <if test="orderid != null">
+        orderId = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUsername != null">
+        order_username = #{orderUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="orderCreatetime != null">
+        order_createtime = #{orderCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderRoom != null">
+        order_room = #{orderRoom,jdbcType=VARCHAR},
+      </if>
+      <if test="checkintime != null">
+        checkintime = #{checkintime,jdbcType=DATE},
+      </if>
+      <if test="checkouttime != null">
+        checkouttime = #{checkouttime,jdbcType=DATE},
+      </if>
+      <if test="nights != null">
+        nights = #{nights,jdbcType=INTEGER},
+      </if>
+      <if test="addRequest != null">
+        add_request = #{addRequest,jdbcType=VARCHAR},
+      </if>
+      <if test="originalprice != null">
+        originalprice = #{originalprice,jdbcType=DOUBLE},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="end != null">
+        end = #{end,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crud.bean.Orders">
+    update orders
+    set orderId = #{orderid,jdbcType=VARCHAR},
+      order_username = #{orderUsername,jdbcType=VARCHAR},
+      realname = #{realname,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      order_createtime = #{orderCreatetime,jdbcType=TIMESTAMP},
+      order_room = #{orderRoom,jdbcType=VARCHAR},
+      checkintime = #{checkintime,jdbcType=DATE},
+      checkouttime = #{checkouttime,jdbcType=DATE},
+      nights = #{nights,jdbcType=INTEGER},
+      add_request = #{addRequest,jdbcType=VARCHAR},
+      originalprice = #{originalprice,jdbcType=DOUBLE},
+      discount = #{discount,jdbcType=DOUBLE},
+      price = #{price,jdbcType=DOUBLE},
+      end = #{end,jdbcType=INTEGER}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

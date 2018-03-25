@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crud.dao.RoomMapper">
+  <resultMap id="BaseResultMap" type="com.crud.bean.Room">
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="roomnumber" jdbcType="VARCHAR" property="roomnumber" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="book" jdbcType="INTEGER" property="book" />
+    <result column="computer" jdbcType="INTEGER" property="computer" />
+    <result column="garden" jdbcType="INTEGER" property="garden" />
+    <result column="freebreakfast" jdbcType="INTEGER" property="freebreakfast" />
+    <result column="dailyclean" jdbcType="INTEGER" property="dailyclean" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    Id, roomnumber, size, price, book, computer, garden, freebreakfast, dailyclean, pic
+  </sql>
+  <select id="selectByExample" parameterType="com.crud.bean.RoomExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from room
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from room
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from room
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.crud.bean.RoomExample">
+    delete from room
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.crud.bean.Room">
+    insert into room (Id, roomnumber, size, 
+      price, book, computer, 
+      garden, freebreakfast, dailyclean, 
+      pic)
+    values (#{id,jdbcType=INTEGER}, #{roomnumber,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, 
+      #{price,jdbcType=DOUBLE}, #{book,jdbcType=INTEGER}, #{computer,jdbcType=INTEGER}, 
+      #{garden,jdbcType=INTEGER}, #{freebreakfast,jdbcType=INTEGER}, #{dailyclean,jdbcType=INTEGER}, 
+      #{pic,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crud.bean.Room">
+    insert into room
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        Id,
+      </if>
+      <if test="roomnumber != null">
+        roomnumber,
+      </if>
+      <if test="size != null">
+        size,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="book != null">
+        book,
+      </if>
+      <if test="computer != null">
+        computer,
+      </if>
+      <if test="garden != null">
+        garden,
+      </if>
+      <if test="freebreakfast != null">
+        freebreakfast,
+      </if>
+      <if test="dailyclean != null">
+        dailyclean,
+      </if>
+      <if test="pic != null">
+        pic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roomnumber != null">
+        #{roomnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="book != null">
+        #{book,jdbcType=INTEGER},
+      </if>
+      <if test="computer != null">
+        #{computer,jdbcType=INTEGER},
+      </if>
+      <if test="garden != null">
+        #{garden,jdbcType=INTEGER},
+      </if>
+      <if test="freebreakfast != null">
+        #{freebreakfast,jdbcType=INTEGER},
+      </if>
+      <if test="dailyclean != null">
+        #{dailyclean,jdbcType=INTEGER},
+      </if>
+      <if test="pic != null">
+        #{pic,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.crud.bean.RoomExample" resultType="java.lang.Long">
+    select count(*) from room
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update room
+    <set>
+      <if test="record.id != null">
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.roomnumber != null">
+        roomnumber = #{record.roomnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.size != null">
+        size = #{record.size,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DOUBLE},
+      </if>
+      <if test="record.book != null">
+        book = #{record.book,jdbcType=INTEGER},
+      </if>
+      <if test="record.computer != null">
+        computer = #{record.computer,jdbcType=INTEGER},
+      </if>
+      <if test="record.garden != null">
+        garden = #{record.garden,jdbcType=INTEGER},
+      </if>
+      <if test="record.freebreakfast != null">
+        freebreakfast = #{record.freebreakfast,jdbcType=INTEGER},
+      </if>
+      <if test="record.dailyclean != null">
+        dailyclean = #{record.dailyclean,jdbcType=INTEGER},
+      </if>
+      <if test="record.pic != null">
+        pic = #{record.pic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update room
+    set Id = #{record.id,jdbcType=INTEGER},
+      roomnumber = #{record.roomnumber,jdbcType=VARCHAR},
+      size = #{record.size,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DOUBLE},
+      book = #{record.book,jdbcType=INTEGER},
+      computer = #{record.computer,jdbcType=INTEGER},
+      garden = #{record.garden,jdbcType=INTEGER},
+      freebreakfast = #{record.freebreakfast,jdbcType=INTEGER},
+      dailyclean = #{record.dailyclean,jdbcType=INTEGER},
+      pic = #{record.pic,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crud.bean.Room">
+    update room
+    <set>
+      <if test="roomnumber != null">
+        roomnumber = #{roomnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        size = #{size,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="book != null">
+        book = #{book,jdbcType=INTEGER},
+      </if>
+      <if test="computer != null">
+        computer = #{computer,jdbcType=INTEGER},
+      </if>
+      <if test="garden != null">
+        garden = #{garden,jdbcType=INTEGER},
+      </if>
+      <if test="freebreakfast != null">
+        freebreakfast = #{freebreakfast,jdbcType=INTEGER},
+      </if>
+      <if test="dailyclean != null">
+        dailyclean = #{dailyclean,jdbcType=INTEGER},
+      </if>
+      <if test="pic != null">
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crud.bean.Room">
+    update room
+    set roomnumber = #{roomnumber,jdbcType=VARCHAR},
+      size = #{size,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      book = #{book,jdbcType=INTEGER},
+      computer = #{computer,jdbcType=INTEGER},
+      garden = #{garden,jdbcType=INTEGER},
+      freebreakfast = #{freebreakfast,jdbcType=INTEGER},
+      dailyclean = #{dailyclean,jdbcType=INTEGER},
+      pic = #{pic,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

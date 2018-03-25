@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="
+  http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/aop 
+  http://www.springframework.org/schema/aop/spring-aop.xsd
+  http://www.springframework.org/schema/tx 
+  http://www.springframework.org/schema/tx/spring-tx.xsd
+  http://www.springframework.org/schema/context 
+  http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!-- Spring的配置文件，配置和业务逻辑有关 -->
+	<context:component-scan base-package="com.crud">
+	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+  <!-- 引入外部属性文件 -->
+  <context:property-placeholder location="classpath:db.properties"/>
+  
+  <!-- sqlSessionFactory -->
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  <!--加载mybatis配置文件  -->
+  		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+  <!-- 配置数据源 -->
+  		<property name="dataSource" ref="dataSource"></property>
+  <!-- 指定mybatis的mapper文件路径 -->
+  <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+  </bean>
+  
+  <!-- 配置一个可以批量插入的sqlSession -->
+  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+  <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+  <constructor-arg name="executorType" value="BATCH"></constructor-arg>
+  </bean>
+  
+  <!-- 配置c3p0数据源 -->
+  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+  <property name="driverClass" value="${jdbc.driver}"></property>
+  <property name="jdbcUrl" value="${jdbc.url}"></property>
+  <property name="user" value="${jdbc.username}"></property>
+  <property name="password" value="${jdbc.password}"></property>
+  </bean>
+
+<!-- mapper扫描器 -->
+  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+  <!-- 指定扫描的包名 name的属性值固定 
+  		如果扫描多个包，不能使用通配符。
+  		要使用半角逗号隔开-->
+  <property name="basePackage" value="com.crud.dao"></property>
+  <!-- name的属性值固定 -->
+  <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+  </bean>
+  
+ <!-- 定义事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource"></property>
+	</bean>
+<!-- 开启基于配置文件的事务 -->
+ <aop:config>
+ 	<aop:pointcut expression="execution(* com.crud.service..*(..))" id="txPoint"/>
+	<aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
+	</aop:config>
+	
+<!-- 通知 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+	<tx:attributes>
+		<tx:method name="*" />
+		<tx:method name="get*" read-only="true"/>
+	</tx:attributes>
+	</tx:advice>
+  
+  
+</beans>
